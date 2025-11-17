@@ -38,7 +38,7 @@ export const getUsersForSidebar =async (req, res) => {
             $or: [
                 {senderId: myId, receiverId: selectedUserId},
                 {senderId: selectedUserId, receiverId: myId}
-            ]
+            ] 
         })
         await Message.updateMany({senderId: selectedUserId, receiverId: myId},
              {seen: true}),
