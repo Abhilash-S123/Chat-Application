@@ -63,6 +63,20 @@ const logout = async () => {
     socket.disconnect()
 }
 
+// Update profile function to handle user profile updates
+
+const updateProfile = async (body) => {
+    try {
+        const {data} = await axios.put('/api/auth/update-profile', body)
+        if (data.success) {
+            setAuthUser(data.user)
+            toast.success("profile updated successfullly")
+        }
+    } catch (error) {
+        toast.error(error.message)
+    }
+}
+
 // Connect socket function to handle socket connection and online users updates
 
 const connectSocket = (userData) => {
@@ -91,6 +105,9 @@ useEffect(() => {
         authUser,
         onlineUsers,
         socket,
+        login,
+        logout,
+        updateProfile
     }
 
     return (
