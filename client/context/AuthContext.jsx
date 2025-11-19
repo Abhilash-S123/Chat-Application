@@ -32,11 +32,27 @@ export const AuthProvider = ({ children }) => {
 
 // Login function to handle user authentication and socket connection
 
-const login = async (state, Credentials) => {
+const login = async (state, credentials) => {
+    try {
+        const {data} =await axios.post(`/api/auth/${state}`,credentials)
+        if (data.success){
+            setAuthUser(data.userData)
+            connectSocket(data.userData)
+            axios.defaults.headers.common["token"] = data.token
+            setToken(data.token)
+            localStorage.setItem("token", data.token)
+            toast.success(data.message)
+        } else {
+            toast.error(data.message)
+        }
+    } catch (error) {
+        toast.error(error.message)
 
+    }
 }
 
-// Connectsocket function to handle socket connection and online users updates
+// Connect socket function to handle socket connection and online users updates
+
 const connectSocket = (userData) => {
     if(!userData || socket?.connected) return
     const newSocket = io(backendurl, {
@@ -47,7 +63,7 @@ const connectSocket = (userData) => {
     newSocket.connect();
     setSocket(newSocket);
 
-    newSocket.on("getOnlineUsers", (userIds) {
+    newSocket.on("getOnlineUsers", (userIds) => {
         setOnlineUsers(userIds)
     })
 }
@@ -61,11 +77,8 @@ useEffect(() => {
     value = {
         axios,
         authUser,
-        setAuthUser,
         onlineUsers,
-        setOnlineUsers,
         socket,
-        setSocket
     }
 
     return (
