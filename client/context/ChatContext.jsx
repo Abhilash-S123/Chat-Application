@@ -1,7 +1,7 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { AuthContext } from "./AuthContext";
 
-
+   
 export const ChatContext = createContext();
 
 export const ChatProvider = ({children}) => {
@@ -37,6 +37,23 @@ export const ChatProvider = ({children}) => {
        toast.error(error.messages)
     }
   }
+
+ //function to send message to selected user
+ const sendMessage = async (messageData) => {
+     try {
+        const {data} = await axios.post(`/api/messages/send/
+        ${selectedUser._id}`, messageData)
+        if(data.success){
+            setMessages((prevMessages) => [...prevMessages, data.newMessage])
+        } else {
+            toast.error(data.messages)
+        }
+            
+     } catch (error) {
+         toast.error(error.messages)
+     }
+ }
+
       const value = {
 
       }
