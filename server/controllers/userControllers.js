@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 
 // Signup a new user
 export const signup = async (req, res) => {
+    console.log(req.body);
     const { fullName, email, password, bio} = req.body;
 
     try {
@@ -36,11 +37,14 @@ export const signup = async (req, res) => {
 
 // Controller to login a user
 export const login = async (req, res) => {
+
     try {
        const {email, password} = req.body;
+       
+       
        const userData = await User.findOne({email})
 
-       const isPasswordCorrect = await bcrypt.compare(password, userData.password)
+       const isPasswordCorrect = await bcrypt.compare(password, userData.password) 
 
        if (!isPasswordCorrect) {
         return res.json({success: false, message: "Invalid crendentials"})

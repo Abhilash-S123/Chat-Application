@@ -15,8 +15,8 @@ export const AuthProvider = ({ children }) => {
     const [onlineUsers, setOnlineUsers] = useState([])
     const [socket, setSocket] = useState(null)
 
-    // check if user is authenticated and if so, set the user 
-    // data and connect the socket
+//  check if user is authenticated and if so, set the user 
+//      data and connect the socket
 
     const checkAuth = async () => {
         try {
@@ -100,7 +100,7 @@ useEffect(() => {
      checkAuth();
 }, []);
 
-    value = {
+   const value = {
         axios,
         authUser,
         onlineUsers,

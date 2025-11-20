@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import assets, { userDummyData } from '../assets/assets'
 import { useNavigate } from 'react-router'
+import { AuthContext } from '../../context/AuthContext'
 
 const SideBar = ({ selectedUser, setSelectedUser }) => {
+
+   const {logout} = useContext(AuthContext)    
 
    const navigate = useNavigate()
 
@@ -20,7 +23,7 @@ const SideBar = ({ selectedUser, setSelectedUser }) => {
                     group-hover:block'>
                         <p className='cursor-pointer text-sm' onClick={() => navigate('/profile')}>Edit Profile</p>
                         <hr className='my-2 border-t border-gray-500'/>
-                        <p className='cursor-pointer text-sm'>Logout</p>
+                        <p onClick={() => logout()} className='cursor-pointer text-sm'>Logout</p>
                     </div>
                 </div>
             </div>
