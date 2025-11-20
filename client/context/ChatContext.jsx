@@ -38,7 +38,7 @@ export const ChatProvider = ({children}) => {
     }
   }
 
- //function to send message to selected user
+ // function to send message to selected user
  const sendMessage = async (messageData) => {
      try {
         const {data} = await axios.post(`/api/messages/send/
@@ -52,6 +52,25 @@ export const ChatProvider = ({children}) => {
      } catch (error) {
          toast.error(error.messages)
      }
+ }
+
+ // function to subscribe to messages for selected user
+ const subscribeToMessages = async () => {
+    if(!socket) return;
+
+    socket.on("newMessage", (newMessage) => {
+        if( selectedUser && newMessage.senderId === selectedUser._id){
+            newMessage.seen = true;
+            setMessages((prevMessages) => [...prevMessages,newMessage])
+            axios.put(`/api/messages/mark/${newMessage._id}`)
+        } else {
+            setUnseenMessages((prevUnseenMessages) => ({
+              ...prevUnseenMessages, [newMessage.senderId] :
+              prevUnseenMessages[newMessage.senderId] ? prevUnseenMessages
+              [newMessage.senderId] + 1 : 1  
+            }))
+        }
+    })
  }
 
       const value = {
