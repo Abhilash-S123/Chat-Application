@@ -56,7 +56,7 @@ export const ChatProvider = ({children}) => {
 
  // function to subscribe to messages for selected user
  const subscribeToMessages = async () => {
-    if(!socket) return;
+    if(!socket) return;  
 
     socket.on("newMessage", (newMessage) => {
         if( selectedUser && newMessage.senderId === selectedUser._id){
@@ -80,13 +80,14 @@ export const ChatProvider = ({children}) => {
 
    useEffect(() => {
       subscribeToMessages();
-      return () => unsubscribeFromMessage();
+      return () => unsubscribeFromMessage();     
    },[socket, selectedUser])
 
       const value = {
          messages, users, selectedUser, getUsers, setMessages, sendMessage,
          setSelectedUser, unseenMessages, setUnseenMessages
       }
+      
     return(
         <ChatProvider value = {value}>
           {children}

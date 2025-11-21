@@ -101,7 +101,7 @@ useEffect(() => {
 }, []);
 
    const value = {
-        axios,
+        axios,      
         authUser,
         onlineUsers,
         socket,
@@ -111,7 +111,7 @@ useEffect(() => {
     }
 
     return (
-        <AuthContext.Provider value = {value}>
+        <AuthContext.Provider value = {value}>     
             {children}
         </AuthContext.Provider>
     )
