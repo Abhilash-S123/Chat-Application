@@ -65,11 +65,11 @@ const ChatContainer = ({selectedUser, setSelectedUser}) => {
               <label htmlFor="image">
                 <img src={assets.gallery_icon} alt="" className='w-5 mr-2
                 cursor-pointer' />
-              </label>
+              </label>   
           </div>  
           <img src={assets.send_button} alt="" className='w-7
-          cursor-pointer'/>            
-      </div>
+          cursor-pointer'/>             
+      </div>    
 
     </div>
   ) : (

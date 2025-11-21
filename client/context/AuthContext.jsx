@@ -93,12 +93,14 @@ const connectSocket = (userData) => {
         setOnlineUsers(userIds)
     })
 }
-useEffect(() => {
+   useEffect(() => { 
     if (token) {
         axios.defaults.headers.common['token'] = token;
     } 
      checkAuth();
-}, []);
+  }, []);
+
+
 
    const value = {
         axios,      

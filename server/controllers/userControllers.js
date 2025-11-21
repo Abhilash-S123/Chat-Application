@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 
 // Signup a new user
 export const signup = async (req, res) => {
-    console.log(req.body);
+    
     const { fullName, email, password, bio} = req.body;
 
     try {
@@ -44,10 +44,14 @@ export const login = async (req, res) => {
        
        const userData = await User.findOne({email})
 
+        if (!userData) {
+            return res.json({ success: false, message: "Email not found" });
+        }
+   
        const isPasswordCorrect = await bcrypt.compare(password, userData.password) 
 
        if (!isPasswordCorrect) {
-        return res.json({success: false, message: "Invalid crendentials"})
+            return res.json({success: false, message: "Invalid password"})
        }
 
        const token = generateToken(userData._id)
@@ -58,7 +62,7 @@ export const login = async (req, res) => {
     } catch (error) {   
         console.log(error.message);
         res.json({success:false, message: error.message}) 
-    }
+    } 
 }
 
 // Controller to check if user is authenticated
