@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 
    
@@ -73,8 +73,19 @@ export const ChatProvider = ({children}) => {
     })
  }
 
-      const value = {
+ // function to unsubscribe from message
+ const unsubscribeFromMessage = async () => {
+     if(socket) socket.off("newMessage")
+ }
 
+   useEffect(() => {
+      subscribeToMessages();
+      return () => unsubscribeFromMessage();
+   },[socket, selectedUser])
+
+      const value = {
+         messages, users, selectedUser, getUsers, setMessages, sendMessage,
+         setSelectedUser, unseenMessages, setUnseenMessages
       }
     return(
         <ChatProvider value = {value}>
