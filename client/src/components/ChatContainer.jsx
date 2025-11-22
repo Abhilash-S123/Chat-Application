@@ -16,6 +16,10 @@ const ChatContainer = () => {
 
    const scrollEnd = useRef()
 
+   const MAX_SIZE = 4 * 1024 * 1024; // 4 MB
+
+   const fileInputRef = useRef()
+
    const [input, setInput] = useState('')
 
    // Handle sending a message
@@ -29,16 +33,22 @@ const ChatContainer = () => {
    // Handle sending an image
     const handleSendImage = async (e) => {
       const file = e.target.files[0];
-      if(!file || !file.type.startWith("image/")){
+      if(!file || !file.type.startsWith("image/")){
           toast.error("select an image file")
           return;
+      }
+
+      if (file.size > MAX_SIZE) {
+        toast.error("Image too large! ");
+        return;
       }
       const reader = new FileReader()
 
       reader.onloadend = async () => {
         await sendMessage({image: reader.result})
-        e.target.value = ""
+        fileInputRef.current.value = ""
       }
+      reader.readAsDataURL(file)
     }
 
    useEffect(() => {
@@ -46,7 +56,7 @@ const ChatContainer = () => {
       getMessages(selectedUser._id)
     }
    },[selectedUser]) 
-
+  
    useEffect(() => {
     if (scrollEnd.current && messages) {
           scrollEnd.current.scrollIntoView({ behavior : "smooth"})
@@ -104,7 +114,7 @@ const ChatContainer = () => {
               onKeyDown={(e) => e.key === "Enter" ? handleSendMessage(e) : null} type="text" 
               placeholder='Send a message' className='flex-1 text-sm p-3 border-none rounded-lg outline-none
               text-white placeholder-gray-400' />
-              <input onChange={handleSendImage} type="file" id='image' accept='image/png, image/jpeg' hidden />
+              <input ref={fileInputRef} onChange={handleSendImage} type="file" id='image' accept='image/png, image/jpeg' hidden />
               <label htmlFor="image">
                 <img src={assets.gallery_icon} alt="" className='w-5 mr-2
                 cursor-pointer' />
