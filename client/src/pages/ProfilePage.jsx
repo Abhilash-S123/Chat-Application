@@ -16,7 +16,7 @@ const ProfilePage = () => {
    const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedImg) {
-      await updateProfile({fullname: name, bio})
+      await updateProfile({fullName: name, bio})
       navigate('/')
       return
     }

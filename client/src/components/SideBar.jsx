@@ -11,7 +11,7 @@ const SideBar = () => {
 
    const { logout, onlineUsers } = useContext(AuthContext)
 
-   const [input, setInput] = useState(false)
+   const [input, setInput] = useState("")
       
    const navigate = useNavigate()
 
@@ -35,14 +35,14 @@ const SideBar = () => {
                     group-hover:block'>
                         <p className='cursor-pointer text-sm' onClick={() => navigate('/profile')}>Edit Profile</p>
                         <hr className='my-2 border-t border-gray-500'/>
-                        <p onClick={() => logout()} className='cursor-pointer text-sm'>Logout</p>
+                        <p onClick={logout} className='cursor-pointer text-sm'>Logout</p>
                     </div>
                 </div>
             </div>
             <div className='bg-[#282142] rounded-full flex items-center gap-2 py-3 
             px-4 mt-5'> 
                 <img className='w-3' src={assets.search_icon} alt="search" />
-                <input onChange={(e) => setInput(e.target.value)} className='bg-transparent border-none outline-none text-white
+                <input onChange={(e) => setInput(e.target.value)} value={input} className='bg-transparent border-none outline-none text-white
                 text-xs placeholder-[#c8c8c8] flex-1' placeholder='Search User...' type="text" /> 
             </div>
         </div> 

@@ -22,10 +22,10 @@ const ChatContainer = () => {
 
    const [input, setInput] = useState('')
 
-   // Handle sending a message
+   // Handle sending a message      
    const handleSendMessage = async (e) => {
        e.preventDefault();
-       if(input.trim() === "") return null
+       if(input.trim() === "") return null        // trim avoid unneccessary space
        await sendMessage({text: input.trim()})
        setInput("")
    }
@@ -44,11 +44,12 @@ const ChatContainer = () => {
       }
       const reader = new FileReader()
 
+      reader.readAsDataURL(file)
+
       reader.onloadend = async () => {
         await sendMessage({image: reader.result})
         fileInputRef.current.value = ""
       }
-      reader.readAsDataURL(file)
     }
 
    useEffect(() => {
@@ -69,15 +70,13 @@ const ChatContainer = () => {
                    {/* header */}
 
       <div className='flex items-center gap-3 py-3 mx-4 border-b border-stone-500'>
-        <img className='w-8 rounded-full' src={selectedUser.profilePic || assets.avatar_icon} alt="" />
+        <img className='w-8 h-8 rounded-full' src={selectedUser.profilePic || assets.avatar_icon} alt="" />
         <p className='flex-1 text-lg text-white flex items-center gap-2'>
           {selectedUser.fullName}
            {onlineUsers.includes(selectedUser._id) && <span className='w-2 h-2 rounded-full bg-green-500'></span>}
         </p>
         <img onClick={() => setSelectedUser(null)} src={assets.arrow_icon} alt="" 
         className='md:hidden max-w-7'/>
-        <img src={assets.help_icon} alt="" className='max-md:hidden max-w-5' />
-
       </div>
 
                      {/* chat-area */}
@@ -98,7 +97,7 @@ const ChatContainer = () => {
             <div className='text-center text-xs'>
               <img src={msg.senderId === authUser._id ? authUser?.profilePic ||
                assets.avatar_icon : selectedUser?.profilePic || assets.avatar_icon
-               } alt="" className='w-7 rounded-full' />
+               } alt="" className='w-7 h-7 rounded-full' />
               <p className='text-gray-500'>{formatMessageTime(msg.createdAt)}</p>
             </div>
           </div>
