@@ -34,7 +34,22 @@ io.on("connection", (socket) => {
            delete  userSocketMap[userId];
            io.emit("getOnlineUsers", Object.keys(userSocketMap))
      })
-     
+
+      // Event for showing typing status to reciever
+     socket.on("typing", ({senderId, receiverId}) => {
+         const receiverSocketId = userSocketMap[receiverId]
+         if (receiverSocketId) {
+            io.to(receiverSocketId).emit("typing", senderId)
+         }
+     })
+
+     // Event for stop showing typing status
+      socket.on("stopTyping", ({senderId, receiverId}) => {
+         const receiverSocketId = userSocketMap[receiverId]
+         if (receiverSocketId) {
+            io.to(receiverSocketId).emit("stopTyping", senderId)
+         }
+     })
 })
 
 // Middleware setup

@@ -12,6 +12,7 @@ export const ChatProvider = ({children}) => {
     const [users, setUsers] = useState([])
     const [selectedUser, setSelectedUser] = useState(null)
     const [unseenMessages, setUnseenMessages] = useState({})
+    const [typingUser, setTypingUser] = useState(null)
 
     const {socket, axios} = useContext(AuthContext)
 
@@ -28,7 +29,7 @@ export const ChatProvider = ({children}) => {
     }  
  }
 
- // function to get messages for selected user         
+ // function to get messages for selected user and authUser        
   const getMessages = async (userId) => {
     try {
         const {data} = await axios.get(`/api/messages/${userId}`)
@@ -40,7 +41,7 @@ export const ChatProvider = ({children}) => {
     }
   }
 
- // function to send message to selected user
+ // function to send message to selected user (live message)
  const sendMessage = async (messageData) => {
      try {
         const {data} = await axios.post(`/api/messages/send/${selectedUser._id}`, messageData)
@@ -55,7 +56,7 @@ export const ChatProvider = ({children}) => {
      }
  }
 
- // function to subscribe to messages for selected user
+ // function to subscribe to messages for selected user (live message)
  const subscribeToMessages = async () => {
     if(!socket) return;  
 
@@ -71,22 +72,44 @@ export const ChatProvider = ({children}) => {
               [newMessage.senderId] + 1 : 1  
             }))
         }
+
     })
  }
+
+ 
+    
+
+ 
 
  // function to unsubscribe from message
  const unsubscribeFromMessages = async () => {
      if(socket) socket.off("newMessage")
  }
 
-   useEffect(() => {
+   useEffect(() => {     
+    if(!socket) return
+
+    // When someone starts typing
+    socket.on("typing", (senderId) => {
+        setTypingUser(senderId);
+    });
+
+    // When someone stops typing
+    socket.on("stopTyping", () => {
+        setTypingUser(null);
+    });
+
       subscribeToMessages();
-      return () => unsubscribeFromMessages();     
+      return () => {
+        unsubscribeFromMessages()
+        socket.off("typing")
+        socket.off("stopTyping")
+       }    
    },[socket, selectedUser])
 
       const value = {
          messages, users, selectedUser, getUsers, getMessages, sendMessage,
-         setSelectedUser, unseenMessages, setUnseenMessages
+         setSelectedUser, unseenMessages, setUnseenMessages, typingUser
       }
       
     return(
@@ -94,4 +117,4 @@ export const ChatProvider = ({children}) => {
           {children}
         </ChatContext.Provider>
     )
-}
+} 
