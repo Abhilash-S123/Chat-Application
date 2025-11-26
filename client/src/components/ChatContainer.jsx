@@ -55,7 +55,7 @@ const ChatContainer = () => {
    let typingTimeout = useRef(null)
 
   const handleTyping = () => {
-    
+
      if (!selectedUser) return;
 
      socket.emit("typing", {
@@ -94,8 +94,8 @@ const ChatContainer = () => {
         <p className='flex-1 text-lg text-white flex items-center gap-2'>
           {selectedUser.fullName}
           {onlineUsers.includes(selectedUser._id) && <span className='w-2 h-2 rounded-full bg-green-500'></span>}
+          {<span ref={typingTimeout} className='text-sm text-gray-300 '>{ typingUser === selectedUser._id ? "typing..." : ""}</span>}
         </p>
-        <p ref={typingTimeout} className='text-sm text-gray-400'>{typingUser && selectedUser ? "Typing" : ""}</p>
         <img onClick={() => setSelectedUser(null)} src={assets.arrow_icon} alt=""
           className='md:hidden max-w-7' />
       </div>
@@ -132,10 +132,9 @@ const ChatContainer = () => {
       <div className='absolute bottom-0 left-0 right-0 flex items-center gap-3 p-3'>
         <div className='flex-1 flex items-center bg-gray-100/12 px-3 rounded-full'>
           <input onChange={(e) => {setInput(e.target.value); handleTyping();} } value={input}
-            onKeyDown={(e) => e.key === "Enter" ? handleSendMessage(e) : null} type="text"
-            
+            onKeyDown={(e) => e.key === "Enter" ? handleSendMessage(e) : null} type="text"            
             placeholder='Send a message' className='flex-1 text-sm p-3 border-none rounded-lg outline-none
-              text-white placeholder-gray-400' />
+              text-white placeholder-gray-400' />              
           <input ref={fileInputRef} onChange={handleSendImage} type="file" id='image' accept='image/png, image/jpeg' hidden />
           <label htmlFor="image">
             <img src={assets.gallery_icon} alt="" className='w-5 mr-2
