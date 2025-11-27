@@ -55,14 +55,7 @@ export const getUsersForSidebar =async (req, res) => {
  export const markMessageAsSeen = async (req, res) => {
     try {
         const { id } = req.params
-           console.log(3);
         await Message.findByIdAndUpdate(id,{seen: true})
-
-   
-        receiveSocketId = userSocketMap[id]
-        if (receiverSocketId) {
-            socket.emit("messageseen", { senderId: req.user._id })
-        }
        
         res.json({success: true})
     } catch (error) {

@@ -50,14 +50,6 @@ io.on("connection", (socket) => {
             io.to(receiverSocketId).emit("stopTyping", senderId)
          }
      })
-
-    //  // Event for message seen status
-    //  socket.on("messageseen", ({receiverId}) => {
-    //     const receiverSocketId = userSocketMap[receiverId]
-    //     if (receiverSocketId) {
-    //         io.to(receiverSocketId).emit("messageseen", receiverId)
-    //     }
-    //  })
 })
 
 // Middleware setup
