@@ -84,27 +84,47 @@ export const ChatProvider = ({children}) => {
      if(socket) socket.off("newMessage")
  }
 
-   useEffect(() => {     
-    if(!socket) return
+ // REPLACE the useEffect at the bottom of your file with this:
 
-    // When someone starts typing
-    socket.on("typing", (senderId) => {
-        setTypingUser(senderId);
-    });
+   // REPLACE the useEffect at the bottom of ChatContext.jsx with this:
 
-    // When someone stops typing
-    socket.on("stopTyping", () => {
-        setTypingUser(null);
-    });
+    useEffect(() => {
+        if (!socket) return
 
-      subscribeToMessages();
-      return () => {
-        unsubscribeFromMessages()
-        socket.off("typing")
-        socket.off("stopTyping")
-       }    
-   },[socket, selectedUser])
+        // When someone starts typing
+        socket.on("typing", (senderId) => {
+            setTypingUser(senderId);
+        });
 
+        // When someone stops typing  
+        socket.on("stopTyping", () => {
+            setTypingUser(null);
+        });          
+
+        // 1. LIVE UPDATE: When a specific message is marked as seen (while chatting)
+        socket.on("messageSeen", ({ messageId }) => {
+            setMessages(prevMessages => prevMessages.map(msg => 
+                msg._id === messageId ? { ...msg, seen: true } : msg
+            ));
+        });
+
+        // 2. BULK UPDATE: When the user opens the chat and reads ALL previous messages
+        socket.on("messagesSeen", ({ receiverId }) => {
+            if (selectedUser && selectedUser._id === receiverId) {
+                setMessages(prevMessages => prevMessages.map(msg => ({ ...msg, seen: true })));
+            }
+        });
+
+        subscribeToMessages();
+
+        return () => {
+            unsubscribeFromMessages()
+            socket.off("typing")
+            socket.off("stopTyping")
+            socket.off("messageSeen")
+            socket.off("messagesSeen")
+        }
+    }, [socket, selectedUser]) // Depend on selectedUser so we know which chat to update
    
       const value = {
          messages, users, selectedUser, getUsers, getMessages, sendMessage,

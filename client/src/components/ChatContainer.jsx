@@ -22,12 +22,10 @@ const ChatContainer = () => {
 
   const [input, setInput] = useState('')
 
-  const [messageSeen, setMessageSeen] = useState(null)
-
   // Handle sending a message      
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (input.trim() === "") return null        // trim() avoid unneccessary space
+    if (input.trim() === "") return null 
     await sendMessage({ text: input.trim() })
     setInput("")
   }
@@ -107,30 +105,48 @@ const ChatContainer = () => {
       <div className='flex flex-col h-[calc(100%-120px)] overflow-y-scroll p-3
           pb-6'>
         {messages.map((msg, index) => (
-          <div key={index} className={`flex items-end gap-2 justify-end ${msg.
+          <div key={index} className={`flex items-end gap-2 mb-4 justify-end ${msg.
             senderId !== authUser._id && 'flex-row-reverse'}`}>
-            {msg.image ? (
-              <img src={msg.image} alt="" className='max-w-[230px] border
-                    border-gray-700 rounded-lg overflow-hidden mb-8' />
-            ) : (
-              <p className={`p-2 max-w-[200px] md:text-sm font-light rounded-lg
-                      mb-8 break-all bg-violet-500/30 text-white ${msg.senderId === authUser._id ? 'rounded-br-none' :
-                  'rounded-bl-none'}`}>{msg.text}</p>
+            
+            {/* Message Content */}
+            <div className={`flex flex-col ${msg.senderId === authUser._id ? "items-end" : "items-start"}`}>
+                {msg.image ? (
+                <img src={msg.image} alt="" className='max-w-[230px] border
+                        border-gray-700 rounded-lg overflow-hidden' />
+                ) : (
+                <p className={`p-2 max-w-[200px] md:text-sm font-light rounded-lg
+                        break-all bg-violet-500/30 text-white ${msg.senderId === authUser._id ? 'rounded-br-none' :
+                        'rounded-bl-none'}`}>{msg.text}</p>
+                )}
+                
+                {/* Time and Checkmarks */}
+                <div className='flex items-center gap-1 mt-1'>
+                    <p className='text-[10px] text-gray-500'>{formatMessageTime(msg.createdAt)}</p>
+                    
+                    {/* Only show checks on MY messages */}
+                    {msg.senderId === authUser._id && (
+                        msg.seen ? (
+                            // Double Check Blue (Seen)
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>
+                        ) : (
+                            // Single Check Gray (Sent)
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="gray" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                        )
+                    )}
+                </div>
+            </div>
 
-            )}
-           
             <div className='text-center text-xs'>
               <img src={msg.senderId === authUser._id ? authUser?.profilePic ||
                 assets.avatar_icon : selectedUser?.profilePic || assets.avatar_icon
               } alt="" className='w-7 h-7 rounded-full' />
-              <p className='text-gray-500'>{formatMessageTime(msg.createdAt)}</p>
             </div>
           </div>
         ))}
         <div ref={scrollEnd}></div>
       </div>
 
-      {/* bottem area */}
+      {/* bottom area */}
 
       <div className='absolute bottom-0 left-0 right-0 flex items-center gap-3 p-3'>
         <div className='flex-1 flex items-center bg-gray-100/12 px-3 rounded-full'>
@@ -147,15 +163,15 @@ const ChatContainer = () => {
         <img onClick={handleSendMessage} src={assets.send_button} alt="" className='w-7
           cursor-pointer'/>
       </div>
-
+  
     </div>
   ) : (
     <div className='flex flex-col items-center justify-center gap-2 text-gray-500
-    bg-white/10 max-md:hidden'>
+    bg-white/10 max-md:hidden h-full'>
       <img className='max-w-16' src={assets.logo_icon} alt="" />
       <p className='text-lg font-medium text-white'>Chat anytime, anywhere</p>
     </div>
   )
 }
 
-export default ChatContainer  
+export default ChatContainer

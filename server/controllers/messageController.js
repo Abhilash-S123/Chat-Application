@@ -30,39 +30,66 @@ export const getUsersForSidebar =async (req, res) => {
     }
 }
  // Get all messages for selected user
- export const getMessage = async (req, res) => {
+// REPLACE your existing getMessage function with this:
+
+export const getMessage = async (req, res) => {
     try {
-        const { id: selectedUserId } =req.params;
+        const { id: selectedUserId } = req.params;
         const myId = req.user._id;
 
         const messages = await Message.find({
             $or: [
-                {senderId: myId, receiverId: selectedUserId},
-                {senderId: selectedUserId, receiverId: myId}
-            ] 
+                { senderId: myId, receiverId: selectedUserId },
+                { senderId: selectedUserId, receiverId: myId }
+            ]
         })
-        await Message.updateMany({senderId: selectedUserId, receiverId: myId},
-             {seen: true}),
 
-        res.json({success: true, messages})
-    } catch (error) {                      
-        console.log(error.messages);
-        res.json({success: false, message: error.message})
-    }
- }
+        // Mark messages as seen in Database
+        await Message.updateMany(
+            { senderId: selectedUserId, receiverId: myId, seen: false },
+            { seen: true }
+        );
 
- // api to mark message as seen using message id
- export const markMessageAsSeen = async (req, res) => {
-    try {
-        const { id } = req.params
-        await Message.findByIdAndUpdate(id,{seen: true})
-       
-        res.json({success: true})
+        // --- NEW CODE: Notify the sender that I have opened the chat ---
+        const senderSocketId = userSocketMap[selectedUserId];
+        if (senderSocketId) {
+            // Emit an event to the sender telling them "receiverId" (me) read the messages
+            io.to(senderSocketId).emit("messagesSeen", { receiverId: myId });
+        }
+        // -------------------------------------------------------------
+
+        res.json({ success: true, messages })
     } catch (error) {
         console.log(error.messages);
-        res.json({success: false, message: error.message})
+        res.json({ success: false, message: error.message })
     }
- }
+}
+ // api to mark message as seen using message id
+// REPLACE your existing markMessageAsSeen function with this:
+
+export const markMessageAsSeen = async (req, res) => {
+    try {
+        const { id } = req.params
+        
+        // Update to true AND return the updated document (new: true)
+        const message = await Message.findByIdAndUpdate(id, { seen: true }, { new: true })
+
+        if(!message) {
+            return res.status(404).json({success: false, message: "Message not found"})
+        }
+
+        // Notify the sender via Socket that their message was seen
+        const senderSocketId = userSocketMap[message.senderId];
+        if (senderSocketId) {
+            io.to(senderSocketId).emit("messageSeen", { messageId: message._id });
+        }
+
+        res.json({ success: true })
+    } catch (error) {
+        console.log(error.messages);
+        res.json({ success: false, message: error.message })
+    }
+}
 
 // Send message to selected user
 export const sendMessage = async (req, res) => {
