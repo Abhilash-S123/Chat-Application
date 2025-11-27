@@ -65,6 +65,7 @@ export const ChatProvider = ({children}) => {
             newMessage.seen = true;
             setMessages((prevMessages) => [...prevMessages,newMessage])
             axios.put(`/api/messages/mark/${newMessage._id}`)
+           
         } else {
             setUnseenMessages((prevUnseenMessages) => ({
               ...prevUnseenMessages, [newMessage.senderId] :
@@ -75,9 +76,6 @@ export const ChatProvider = ({children}) => {
 
     })
  }
-
- 
-    
 
  
 

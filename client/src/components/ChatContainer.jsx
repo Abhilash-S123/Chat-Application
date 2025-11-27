@@ -22,6 +22,8 @@ const ChatContainer = () => {
 
   const [input, setInput] = useState('')
 
+  const [messageSeen, setMessageSeen] = useState(null)
+
   // Handle sending a message      
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -76,6 +78,10 @@ const ChatContainer = () => {
     if (selectedUser) {
       getMessages(selectedUser._id)
     }
+
+    socket.on("messageseen", ({senderId}) => {
+        setMessageSeen(senderId)
+    })
   }, [selectedUser])
 
   useEffect(() => {
@@ -116,6 +122,8 @@ const ChatContainer = () => {
                   'rounded-bl-none'}`}>{msg.text}</p>
 
             )}
+            <span>{ ( <p>{msg.seen ?  "✓✓" : "✓"}</p>)}</span>
+           
             <div className='text-center text-xs'>
               <img src={msg.senderId === authUser._id ? authUser?.profilePic ||
                 assets.avatar_icon : selectedUser?.profilePic || assets.avatar_icon

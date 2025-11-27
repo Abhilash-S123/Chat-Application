@@ -1,3 +1,4 @@
+import { receiveMessageOnPort } from "worker_threads"
 import cloudinary from "../lib/cloudinary.js"
 import Message from "../models/message.js"
 import User from "../models/user.js"
@@ -55,6 +56,12 @@ export const getUsersForSidebar =async (req, res) => {
     try {
         const { id } = req.params
         await Message.findByIdAndUpdate(id,{seen: true})
+
+        receiveSocketId = userSocketMap[id]
+        if (receiverSocketId) {
+            socket.emit("messageseen", { senderId: req.user._id })
+        }
+       
         res.json({success: true})
     } catch (error) {
         console.log(error.messages);
