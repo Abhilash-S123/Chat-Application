@@ -64,8 +64,8 @@ export const ChatProvider = ({children}) => {
         if( selectedUser && newMessage.senderId === selectedUser._id){
             newMessage.seen = true;
             setMessages((prevMessages) => [...prevMessages,newMessage])
-            axios.put(`/api/messages/mark/${newMessage._id}`)
-           
+              console.log(2);
+            axios.put(`/api/messages/mark/${newMessage._id}`)           
         } else {
             setUnseenMessages((prevUnseenMessages) => ({
               ...prevUnseenMessages, [newMessage.senderId] :
@@ -77,7 +77,7 @@ export const ChatProvider = ({children}) => {
     })
  }
 
- 
+     
 
  // function to unsubscribe from message
  const unsubscribeFromMessages = async () => {

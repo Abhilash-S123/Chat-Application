@@ -55,8 +55,10 @@ export const getUsersForSidebar =async (req, res) => {
  export const markMessageAsSeen = async (req, res) => {
     try {
         const { id } = req.params
+           console.log(3);
         await Message.findByIdAndUpdate(id,{seen: true})
 
+   
         receiveSocketId = userSocketMap[id]
         if (receiverSocketId) {
             socket.emit("messageseen", { senderId: req.user._id })
@@ -95,7 +97,8 @@ export const sendMessage = async (req, res) => {
        if(receiverSocketId) {
            io.to(receiverSocketId).emit("newMessage", newMessage)
        }
-
+            console.log(1);
+            
        res.json({success: true, newMessage});
 
     } catch (error) {
