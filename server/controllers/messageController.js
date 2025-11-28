@@ -30,8 +30,6 @@ export const getUsersForSidebar =async (req, res) => {
     }
 }
  // Get all messages for selected user
-// REPLACE your existing getMessage function with this:
-
 export const getMessage = async (req, res) => {
     try {
         const { id: selectedUserId } = req.params;
@@ -50,13 +48,10 @@ export const getMessage = async (req, res) => {
             { seen: true }
         );
 
-        // --- NEW CODE: Notify the sender that I have opened the chat ---
         const senderSocketId = userSocketMap[selectedUserId];
         if (senderSocketId) {
-            // Emit an event to the sender telling them "receiverId" (me) read the messages
             io.to(senderSocketId).emit("messagesSeen", { receiverId: myId });
         }
-        // -------------------------------------------------------------
 
         res.json({ success: true, messages })
     } catch (error) {
@@ -65,13 +60,10 @@ export const getMessage = async (req, res) => {
     }
 }
  // api to mark message as seen using message id
-// REPLACE your existing markMessageAsSeen function with this:
-
 export const markMessageAsSeen = async (req, res) => {
     try {
         const { id } = req.params
         
-        // Update to true AND return the updated document (new: true)
         const message = await Message.findByIdAndUpdate(id, { seen: true }, { new: true })
 
         if(!message) {
@@ -117,7 +109,6 @@ export const sendMessage = async (req, res) => {
        if(receiverSocketId) {
            io.to(receiverSocketId).emit("newMessage", newMessage)
        }
-            console.log(1);
             
        res.json({success: true, newMessage});
 

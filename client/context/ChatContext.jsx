@@ -75,18 +75,12 @@ export const ChatProvider = ({children}) => {
         }
 
     })
- }
-
-     
+ }     
 
  // function to unsubscribe from message
  const unsubscribeFromMessages = async () => {
      if(socket) socket.off("newMessage")
  }
-
- // REPLACE the useEffect at the bottom of your file with this:
-
-   // REPLACE the useEffect at the bottom of ChatContext.jsx with this:
 
     useEffect(() => {
         if (!socket) return
@@ -108,7 +102,7 @@ export const ChatProvider = ({children}) => {
             ));
         });
 
-        // 2. BULK UPDATE: When the user opens the chat and reads ALL previous messages
+       // 2. BULK UPDATE: When the user opens the chat and reads ALL previous messages
         socket.on("messagesSeen", ({ receiverId }) => {
             if (selectedUser && selectedUser._id === receiverId) {
                 setMessages(prevMessages => prevMessages.map(msg => ({ ...msg, seen: true })));
@@ -124,7 +118,7 @@ export const ChatProvider = ({children}) => {
             socket.off("messageSeen")
             socket.off("messagesSeen")
         }
-    }, [socket, selectedUser]) // Depend on selectedUser so we know which chat to update
+    }, [socket, selectedUser]) 
    
       const value = {
          messages, users, selectedUser, getUsers, getMessages, sendMessage,
