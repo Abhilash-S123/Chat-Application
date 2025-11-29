@@ -126,10 +126,8 @@ const ChatContainer = () => {
                     {/* Only show checks on MY messages */}
                     {msg.senderId === authUser._id && (
                         msg.seen ? (
-                            // Double Check Blue (Seen)
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>
                         ) : (
-                            // Single Check Gray (Sent)
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="gray" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
                         )
                     )}

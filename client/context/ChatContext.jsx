@@ -15,7 +15,7 @@ export const ChatProvider = ({children}) => {
     const [typingUser, setTypingUser] = useState(null)
 
     const {socket, axios} = useContext(AuthContext)
-
+       
 // function to get all users for sidebar 
  const getUsers = async () => {
     try {

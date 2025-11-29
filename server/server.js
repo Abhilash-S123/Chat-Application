@@ -13,8 +13,15 @@ const server = http.createServer(app)
 
 // Initialize socket.io server
 export const io = new Server(server, {
-    cors: {origin: '*'}
+    cors: {origin: '*',
+    methods: ["GET", "POST", "PUT"]
+    }
 })
+
+app.use(cors({
+    origin: "*",
+    credentials: true,
+}))
 
 // Store online users
 export const userSocketMap = {}; // { userId: socketId }
@@ -67,7 +74,7 @@ app.use("/api/messages", messageRouter)
 
 const PORT = process.env.PORT || 5000;
       
-server.listen( PORT, () => {
+server.listen( PORT,"0.0.0.0", () => {
     console.log("server is running on " + PORT); 
 })
 
