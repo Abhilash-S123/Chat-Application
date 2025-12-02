@@ -7,21 +7,27 @@ import userRouter from './routes/userRoutes.js';
 import messageRouter from './routes/messageRoutes.js';
 import {Server} from 'socket.io'
 
+const FRONTEND_URL = process.env.CLIENT_URL
+
 // Create Express app and HTTP server
 const app = express();
 const server = http.createServer(app)
 
-// Initialize socket.io server
+// Initialize socket.io server with CORS
 export const io = new Server(server, {
-    cors: {origin: '*',
-    methods: ["GET", "POST", "PUT"]
+    cors: {
+         origin: FRONTEND_URL,
+         methods: ["GET", "POST", "PUT"],
+         credentials: true
     }
 })
 
-app.use(cors({
-    origin: "*",
-    credentials: true,
-}))
+
+
+io.engine.on("connection_error", (err) => {
+  console.log("Socket error:", err);
+});
+
 
 // Store online users
 export const userSocketMap = {}; // { userId: socketId }
@@ -61,7 +67,10 @@ io.on("connection", (socket) => {
 
 // Middleware setup
 app.use(express.json({limit: "4mb"}));
-app.use(cors());
+app.use(cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+}))
 
 // Routes setup
 app.use("/api/status", (req, res) =>   res.send("Server is live"))
