@@ -9,9 +9,17 @@ import {Server} from 'socket.io'
 
 const FRONTEND_URL = process.env.CLIENT_URL
 
+console.log("CLIENT_URL:", process.env.CLIENT_URL)
+
+
 // Create Express app and HTTP server
 const app = express();
 const server = http.createServer(app)
+
+app.use(cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+}))
 
 // Initialize socket.io server with CORS
 export const io = new Server(server, {
@@ -67,10 +75,7 @@ io.on("connection", (socket) => {
 
 // Middleware setup
 app.use(express.json({limit: "4mb"}));
-app.use(cors({
-    origin: FRONTEND_URL,
-    credentials: true,
-}))
+
 
 // Routes setup
 app.use("/api/status", (req, res) =>   res.send("Server is live"))

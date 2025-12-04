@@ -82,6 +82,7 @@ const updateProfile = async (body) => {
 const connectSocket = (userData) => {
     if(!userData || socket?.connected) return
     const newSocket = io(backendurl, {
+        withCredentials: true,
         query: {
             userId: userData._id
         }
