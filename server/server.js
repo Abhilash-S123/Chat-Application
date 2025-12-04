@@ -16,15 +16,16 @@ console.log("CLIENT_URL:", process.env.CLIENT_URL)
 const app = express();
 const server = http.createServer(app)
 
+// Middleware setup
 app.use(cors({
-    origin: FRONTEND_URL,
+    origin: "*",
     credentials: true,
 }))
 
 // Initialize socket.io server with CORS
 export const io = new Server(server, {
     cors: {
-         origin: FRONTEND_URL,
+         origin: "*",
          methods: ["GET", "POST", "PUT"],
          credentials: true
     }
