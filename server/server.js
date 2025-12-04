@@ -18,14 +18,14 @@ const server = http.createServer(app)
 
 // Middleware setup
 app.use(cors({
-    origin: "*",
+    origin: FRONTEND_URL,
     credentials: true,
 }))
 
 // Initialize socket.io server with CORS
 export const io = new Server(server, {
     cors: {
-         origin: "*",
+         origin: FRONTEND_URL,
          methods: ["GET", "POST", "PUT"],
          credentials: true
     }
