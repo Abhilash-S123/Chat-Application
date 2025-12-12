@@ -10,13 +10,13 @@ A modern, real-time chatting application with Socket.IO, allowing users to conne
 
 
 
-> 💡 **Tip:** To test the chat, create two accounts using different browsers or devices!
-> If you want to use AWS Elasticbeanstalk backend server purchase a domain and convert http to https in AWS then connect it with frontend while hosting.
+> 💡 **Tip:** To test the chat, create two accounts using different browsers or devices and 
+> if you want to use AWS Elasticbeanstalk backend server purchase a domain and convert http to https in AWS then connect it with frontend while hosting.
 
 ## 📸 Screenshots
 
 ### Chat Interface
-![Chat Interface](screenshots/chat.png)
+![Chat Interface](https://github.com/Abhilash-S123/Chat-Application/blob/master/screenshot-of-quichchat.png?raw=true)
 
 ## ✨ Features
 
@@ -85,7 +85,7 @@ A modern, real-time chatting application with Socket.IO, allowing users to conne
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/quickchat.git
+git clone https://github.com/Abhilash-S123/Chat-Application.git
 cd quickchat
 ```
 
@@ -107,7 +107,7 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
 Start backend server:
 ```bash
-npm start
+npm run server
 ```
 
 3. **Frontend Setup**
@@ -118,60 +118,12 @@ npm install
 
 Create `.env` file:
 ```env
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5000
 ```
 
 Start development server:
 ```bash
 npm run dev
-```
-
-## 🔌 API Endpoints
-
-### Authentication
-- `POST /api/auth/signup` - Register new user
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
-- `GET /api/auth/check` - Check authentication status
-
-### Users
-- `GET /api/users` - Get all users
-- `PUT /api/users/profile` - Update user profile
-
-### Messages
-- `GET /api/messages/:userId` - Get chat messages with specific user
-- `POST /api/messages/send/:userId` - Send message to user
-- `POST /api/messages/upload` - Upload image
-
-### Socket.IO Events
-- `connection` - User connects
-- `disconnect` - User disconnects
-- `typing` - User is typing
-- `stopTyping` - User stopped typing
-- `messageSent` - New message sent
-- `messageSeen` - Message marked as seen
-
-## 📁 Project Structure
-```
-quickchat/
-├── client/                 # Frontend React app
-│   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── pages/         # Page components
-│   │   ├── context/       # Context API
-│   │   ├── lib/           # Utility functions
-│   │   └── App.jsx
-│   └── package.json
-│
-├── server/                # Backend Node.js app
-│   ├── controllers/       # Route controllers
-│   ├── models/           # Mongoose models
-│   ├── routes/           # API routes
-│   ├── middleware/       # Auth middleware
-│   ├── lib/              # DB config, Cloudinary
-│   └── server.js         # Entry point with Socket.IO
-│
-└── README.md
 ```
 
 ## 🎯 Key Features Explained
@@ -194,35 +146,14 @@ Images are uploaded to Cloudinary for:
 1. User signs up with email and password
 2. Password is hashed using Bcrypt
 3. JWT token is generated on login
-4. Token is stored in HTTP-only cookies
-5. Protected routes verify token via middleware
+4. Protected routes verify token via middleware
 
 ## 🔒 Security Features
 
 - ✅ Password hashing with Bcrypt
 - ✅ JWT token authentication
-- ✅ HTTP-only cookies
 - ✅ Protected API routes
-- ✅ Input validation
 - ✅ CORS configuration
-
-## 📝 Environment Variables
-
-**Backend (.env)**
-```
-PORT=5000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/quickchat
-JWT_SECRET=your_random_secret_key_here
-CLOUDINARY_CLOUD_NAME=your_cloudinary_name
-CLOUDINARY_API_KEY=your_cloudinary_key
-CLOUDINARY_API_SECRET=your_cloudinary_secret
-NODE_ENV=production
-```
-
-**Frontend (.env)**
-```
-VITE_API_URL=https://your-backend-url.com/api
-```
 
 ## 🤝 Contributing
 
@@ -240,16 +171,6 @@ MIT License
 
 ## 👤 Author
 
-Your Name - [GitHub Profile](https://github.com/yourusername)
-
-## 🙏 Acknowledgments
-
-- Socket.IO for real-time communication
-- Cloudinary for image hosting
-- MongoDB Atlas for database hosting
-- AWS Elastic Beanstalk for deployment
-- Render for HTTPS hosting
-
----
+Abhilash.S - [GitHub Profile](https://github.com/Abhilash-S123)
 
 ⭐ If you like this project, please give it a star!
