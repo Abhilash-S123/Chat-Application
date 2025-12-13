@@ -86,7 +86,7 @@ A modern, real-time chatting application with Socket.IO, allowing users to conne
 1. **Clone the repository**
 ```bash
 git clone https://github.com/Abhilash-S123/Chat-Application.git
-cd quickchat
+cd Chat-app
 ```
 
 2. **Backend Setup**
